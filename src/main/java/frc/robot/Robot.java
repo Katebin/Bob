@@ -3,8 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+
+import static frc.robot.Constants.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,20 +21,18 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
 
-  // motor init
-  public final MotorGroup motorLeft = new MotorGroup(new VictorSPX[] {new VictorSPX(1), new VictorSPX(2), new VictorSPX(3)} );  // ensure that these ports are correct
-  public final MotorGroup motorRight = new MotorGroup(new VictorSPX[] {new VictorSPX(4), new VictorSPX(5), new VictorSPX(6)} ); // ensure that these ports are correct
+ 
+  // joystick init
+  public final XboxController controller = new XboxController(JOYSTICK_PORT);
 
-  // Drivetrain init
-  public final DriveTrain drive = new DriveTrain(motorLeft, motorRight);
+  // drive train init
+  public final DriveTrain drive = new DriveTrain(controller);
 
   @Override
   public void robotInit() {}
 
   @Override
-  public void robotPeriodic() {
-    
-  }
+  public void robotPeriodic() {}
 
   @Override
   public void autonomousInit() {}
@@ -43,7 +44,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    drive.move();
+  }
 
   @Override
   public void disabledInit() {}

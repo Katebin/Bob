@@ -1,10 +1,10 @@
 package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import static frc.robot.Constants.*;
 
 public class MotorGroup {
     public final VictorSPX[] motors;
-    private final double maxPercent = 1;
 
     public MotorGroup(VictorSPX[] motors) {
         this.motors = motors;
@@ -22,10 +22,10 @@ public class MotorGroup {
         // ensures the motor does not go over defined limit 
         // ie: avoid motor burn out
 
-        if(percent > maxPercent) {
-            set(maxPercent);
-        } else if(percent < maxPercent * -1) {
-            set(maxPercent * -1);
+        if(percent > MAX_MOTOR_PERCENT) {
+            set(MAX_MOTOR_PERCENT);
+        } else if(percent < MAX_MOTOR_PERCENT * -1) {
+            set(MAX_MOTOR_PERCENT * -1);
         } else {
             set(percent);
         }

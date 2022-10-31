@@ -1,34 +1,43 @@
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
+import edu.wpi.first.wpilibj.XboxController;
+
+import java.math.*;
+import static frc.robot.Constants.*;
 
 public class DriveTrain {
-    public final MotorGroup motorLeft;
-    public final MotorGroup motorRight;
+    // motor init
+    public final MotorGroup motorLeft = new MotorGroup(new VictorSPX[] {new VictorSPX(LEFT_MOTOR_PORT_A), new VictorSPX(LEFT_MOTOR_PORT_B), new VictorSPX(LEFT_MOTOR_PORT_C)} );  // ensure that these ports are correct
+    public final MotorGroup motorRight = new MotorGroup(new VictorSPX[] {new VictorSPX(RIGHT_MOTOR_PORT_A), new VictorSPX(RIGHT_MOTOR_PORT_B), new VictorSPX(RIGHT_MOTOR_PORT_C)} ); // ensure that these ports are correct
+  
+    public final XboxController controller;
 
-    public DriveTrain(MotorGroup motorLeft, MotorGroup motorRight) {
-        this.motorLeft = motorLeft;
-        this.motorRight = motorRight;
+    public DriveTrain(XboxController controller) {
+        this.controller = controller;
     }
 
-    public void vertical(int percent) {
-        // move forward / backward
-        motorLeft.safeSet(percent);
-        motorRight.safeSet(percent);
-    }
+    public void move() {
+        // tank drive
+        //motorLeft.safeSet(controller.getLeftY());
+        //motorRight.safeSet(controller.getRightY() * -1); // invert motor
 
-    public void biasLeft(int percent, int bias) {
-        // negative values not reccomended, for wider turns
-        motorLeft.safeSet(percent - bias);
-        motorRight.safeSet(percent);
-    }
+        // cooler drive
+        double curvature = controller.getLeftX() / MIN_TURNING_RADIUS_M; // inverse meters
+        double speed = controller.getLeftY();
 
-    public void biasRight(int percent, int bias) {
-        motorLeft.safeSet(percent);
-        motorRight.safeSet(percent - bias);
-    }
+        double speedLeft = speed * (1 + curvature * WHEEL_BASE_M);
+        double speedRight = speed * (1 - curvature * WHEEL_BASE_M); 
 
-    public void staticTurn(int percent) {
-        // turn left / right
-        motorLeft.safeSet(percent);
-        motorRight.safeSet(percent * -1);
+        double maxSpeed = Math.max(Math.abs(speedLeft), Math.abs(speedRight)); // abs = flip negatives
+        
+        if(maxSpeed > MAX_MOTOR_PERCENT) {
+        // if motor faster than max speed, divide both motors to perserve ratio (stay in range)
+        speedLeft /= maxSpeed;
+        speedRight /= maxSpeed;
+        }
+
+        motorLeft.safeSet(speedLeft);
+        motorRight.safeSet(speedRight * -1); // inverted
     }
 }
