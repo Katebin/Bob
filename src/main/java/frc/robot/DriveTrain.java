@@ -18,7 +18,6 @@ public class DriveTrain {
     private boolean isStill(double value) {
         // returns bool if joystick is not moving
         // basic but needed to save me time & fix joystick
-        
         if(value > 0.15) {
             return false;
         } else if(value < -0.15) {
@@ -32,8 +31,8 @@ public class DriveTrain {
 
     public void move() {
         // method moves robot according to user input
-        double speed = controller.getLeftY();
-        double bias = controller.getRightX();
+        double speed = controller.getLeftX();
+        double bias = controller.getRightY();
 
         // joystick controlls
         if(isStill(speed) == true && bias > 0.1) {
