@@ -17,8 +17,8 @@ public class DriveTrain {
 
     public void move() {
         // method moves robot according to user input
-        double speed = controller.getRightY();
-        double bias = controller.getLeftX();
+        double speed = controller.getLeftY();
+        double bias = controller.getRightX();
 
         // joystick controlls
         if(speed == 0 && bias > 0) {
@@ -51,6 +51,15 @@ public class DriveTrain {
             } else {
                 motorLeft.safeSet(speed - (bias * -1));
             }
+        } else if(speed != 0) {
+            // vertical movement
+            motorLeft.safeSet(speed);
+            motorRight.safeSet(speed);
+
+        } else {
+            // no input
+            motorLeft.safeSet(0);
+            motorRight.safeSet(0);
         }
     }
 }
