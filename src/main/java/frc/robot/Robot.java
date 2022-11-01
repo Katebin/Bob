@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   public final XboxController controller = new XboxController(JOYSTICK_PORT);
 
   // drive train init
-  public final DriveTrainArcade drive = new DriveTrainArcade(controller);
+  public final DriveTrain drive = new DriveTrain(controller);
 
   @Override
   public void robotInit() {}
